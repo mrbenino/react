@@ -1,21 +1,25 @@
 import React from 'react';
 import './Auth.scss';
-import {NavigateFunction, useLocation, useNavigate} from "react-router-dom";
+import {Navigate, NavigateFunction, useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../hook/useAuth";
 
-function Auth() {
+const Auth = () => {
   const navigate: NavigateFunction = useNavigate();
-  const locstion = useLocation();
+  const location = useLocation();
   const {signin}: any = useAuth();
+  const user: any = useAuth();
+  console.log(user);
   
-  const fromPage = locstion.state?.from?.pathname || '/data-birth';
+  if (user.userName) {
+    return <Navigate to='/data-birth' state={{from: location}}/>;
+  }
   
   const handlerSubmit = (event: any) => {
     event.preventDefault();
     const form = event.target;
-    const user = form.username.value;
+    const username = form.username.value;
     
-    signin(user, () => navigate(fromPage, {replace: true}));
+    signin({name: username}, () => navigate('/data-birth', {replace: true}));
   }
   
   return (
